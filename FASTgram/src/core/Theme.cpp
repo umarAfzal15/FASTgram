@@ -21,34 +21,99 @@ bool  Theme::isDark() {
 // Core UI Palette
 Color Theme::outerBackground() {
 	if (darkMode) {
-		return GetColor(0x334155FF);
+		return GetColor(0x05070BFF);
 	}
 	else {
-		return GetColor(0xF1F5F9FF);
+		return GetColor(0xE8ECF4FF);
 	}
 }
+
 Color Theme::background() {
 	if (darkMode) {
-		return GetColor(0x334155FF);
+		return GetColor(0x0B0F19FF);
 	}
 	else {
-		return GetColor(0xF8FAFCFF);
+		return GetColor(0xF7F9FCFF);
 	}
 }
 
 Color Theme::surface() {
 	if (darkMode) {
-		return GetColor(0x1E293BFF);
+		return GetColor(0x1B2438FF);
 	}
 	else {
-		return GetColor(0xFFFFFFFF);
+		return GetColor(0xF0F4FAFF);
 	}
 }
-//Color Theme:: surfaceHover(); 
-//Color Theme:: primaryText(); 
-//Color Theme:: secondaryText();
-//Color Theme:: border(); 
-//Color Theme:: accent();
-//Color Theme:: accentHover(); 
-//Color Theme:: danger();
-//Color Theme:: success(); 
+
+Color Theme::surfaceHover() {
+	if (darkMode) {
+		return GetColor(0x243049FF);
+	}
+	else {
+		return GetColor(0xE2E8F3FF);
+	}
+}
+
+Color Theme::primaryText() {
+	if (darkMode) {
+		return GetColor(0xF8FAFCFF);
+	}
+	else {
+		return GetColor(0x0B1120FF);
+	}
+}
+
+Color Theme::secondaryText() {
+	if (darkMode) {
+		return GetColor(0xCBD5E1FF);
+	}
+	else {
+		return GetColor(0x334155FF);
+	}
+}
+
+Color Theme::border() {
+	if (darkMode) {
+		return GetColor(0x232F46FF);
+	}
+	else {
+		return GetColor(0xDCE3EEFF);
+	}
+}
+
+Color Theme::accent() {
+	if (darkMode) {
+		return GetColor(0x6366F1FF);
+	}
+	else {
+		return GetColor(0x4F46E5FF);
+	}
+}
+
+Color Theme::accentHover() {
+	if (darkMode) {
+		return GetColor(0x818CF8FF);
+	}
+	else {
+		return GetColor(0x4338CAFF);
+	}
+}
+//
+Color Theme::danger() {
+	if (darkMode) {
+		return GetColor(0xFEE2E2FF);
+	}
+	else {
+		return GetColor(0xEF4444FF);
+	}
+}
+
+Color Theme::success() {
+	if (darkMode) {
+		return GetColor(0xD1FAE5FF);
+	}
+	else {
+		return GetColor(0x10B981FF);
+	}
+}
