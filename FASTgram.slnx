@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="FASTgram/FASTgram.vcxproj" Id="d4ef857d-0dda-45a4-8534-3adb534b31fe" />
+</Solution>

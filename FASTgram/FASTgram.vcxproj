@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{d4ef857d-0dda-45a4-8534-3adb534b31fe}</ProjectGuid>
+    <RootNamespace>FASTgram</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\app\Application.cpp" />
+    <ClCompile Include="src\app\main.cpp" />
+    <ClCompile Include="src\core\RollNumber.cpp" />
+    <ClCompile Include="src\core\Session.cpp" />
+    <ClCompile Include="src\core\Theme.cpp" />
+    <ClCompile Include="src\core\Time.cpp" />
+    <ClCompile Include="src\models\Account.cpp" />
+    <ClCompile Include="src\models\Badge.cpp" />
+    <ClCompile Include="src\models\Comment.cpp" />
+    <ClCompile Include="src\models\Group.cpp" />
+    <ClCompile Include="src\models\Message.cpp" />
+    <ClCompile Include="src\models\Notification.cpp" />
+    <ClCompile Include="src\models\Post.cpp" />
+    <ClCompile Include="src\models\Story.cpp" />
+    <ClCompile Include="src\services\ChatManager.cpp" />
+    <ClCompile Include="src\services\FileManager.cpp" />
+    <ClCompile Include="src\services\ImageStore.cpp" />
+    <ClCompile Include="src\services\NotificationManager.cpp" />
+    <ClCompile Include="src\services\PostManager.cpp" />
+    <ClCompile Include="src\services\SearchEngine.cpp" />
+    <ClCompile Include="src\services\UserManager.cpp" />
+    <ClCompile Include="src\ui\screens\CampusScreen.cpp" />
+    <ClCompile Include="src\ui\screens\ChatScreen.cpp" />
+    <ClCompile Include="src\ui\screens\ExploreScreen.cpp" />
+    <ClCompile Include="src\ui\screens\HomeScreen.cpp" />
+    <ClCompile Include="src\ui\screens\LoginScreen.cpp" />
+    <ClCompile Include="src\ui\screens\NewPostScreen.cpp" />
+    <ClCompile Include="src\ui\screens\NotificationScreen.cpp" />
+    <ClCompile Include="src\ui\screens\PostDetailScreen.cpp" />
+    <ClCompile Include="src\ui\screens\ProfileScreen.cpp" />
+    <ClCompile Include="src\ui\screens\ScreenManager.cpp" />
+    <ClCompile Include="src\ui\screens\SettingsScreen.cpp" />
+    <ClCompile Include="src\ui\screens\SocietyScreen.cpp" />
+    <ClCompile Include="src\ui\widgets\Avatar.cpp" />
+    <ClCompile Include="src\ui\widgets\Button.cpp" />
+    <ClCompile Include="src\ui\widgets\Modal.cpp" />
+    <ClCompile Include="src\ui\widgets\ScrollView.cpp" />
+    <ClCompile Include="src\ui\widgets\Slider.cpp" />
+    <ClCompile Include="src\ui\widgets\TextBox.cpp" />
+    <ClCompile Include="src\ui\widgets\Toast.cpp" />
+    <ClCompile Include="src\ui\widgets\Toggle.cpp" />
+    <ClCompile Include="src\ui\widgets\Widget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\app\Application.h" />
+    <ClInclude Include="src\core\Exceptions.h" />
+    <ClInclude Include="src\core\RollNumber.h" />
+    <ClInclude Include="src\core\Serializable.h" />
+    <ClInclude Include="src\core\Session.h" />
+    <ClInclude Include="src\core\Theme.h" />
+    <ClInclude Include="src\core\Time.h" />
+    <ClInclude Include="src\models\Account.h" />
+    <ClInclude Include="src\models\Badge.h" />
+    <ClInclude Include="src\models\Comment.h" />
+    <ClInclude Include="src\models\Group.h" />
+    <ClInclude Include="src\models\Message.h" />
+    <ClInclude Include="src\models\Notification.h" />
+    <ClInclude Include="src\models\Post.h" />
+    <ClInclude Include="src\models\Story.h" />
+    <ClInclude Include="src\services\ChatManager.h" />
+    <ClInclude Include="src\services\FileManager.h" />
+    <ClInclude Include="src\services\ImageStore.h" />
+    <ClInclude Include="src\services\NotificationManager.h" />
+    <ClInclude Include="src\services\PostManager.h" />
+    <ClInclude Include="src\services\SearchEngine.h" />
+    <ClInclude Include="src\services\UserManager.h" />
+    <ClInclude Include="src\ui\screens\CampusScreen.h" />
+    <ClInclude Include="src\ui\screens\ChatScreen.h" />
+    <ClInclude Include="src\ui\screens\ExploreScreen.h" />
+    <ClInclude Include="src\ui\screens\HomeScreen.h" />
+    <ClInclude Include="src\ui\screens\LoginScreen.h" />
+    <ClInclude Include="src\ui\screens\NewPostScreen.h" />
+    <ClInclude Include="src\ui\screens\NotificationScreen.h" />
+    <ClInclude Include="src\ui\screens\PostDetailScreen.h" />
+    <ClInclude Include="src\ui\screens\ProfileScreen.h" />
+    <ClInclude Include="src\ui\screens\Screen.h" />
+    <ClInclude Include="src\ui\screens\ScreenManager.h" />
+    <ClInclude Include="src\ui\screens\SettingsScreen.h" />
+    <ClInclude Include="src\ui\screens\SocietyScreen.h" />
+    <ClInclude Include="src\ui\widgets\Avatar.h" />
+    <ClInclude Include="src\ui\widgets\Button.h" />
+    <ClInclude Include="src\ui\widgets\Modal.h" />
+    <ClInclude Include="src\ui\widgets\ScrollView.h" />
+    <ClInclude Include="src\ui\widgets\Slider.h" />
+    <ClInclude Include="src\ui\widgets\TextBox.h" />
+    <ClInclude Include="src\ui\widgets\Toast.h" />
+    <ClInclude Include="src\ui\widgets\Toggle.h" />
+    <ClInclude Include="src\ui\widgets\Widget.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\raylib.6.2.0\build\native\raylib.targets" Condition="Exists('..\packages\raylib.6.2.0\build\native\raylib.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\raylib.6.2.0\build\native\raylib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\raylib.6.2.0\build\native\raylib.targets'))" />
+  </Target>
+</Project>
