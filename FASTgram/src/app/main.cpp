@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "src/core/Theme.h"
 #include <string>
 using namespace std;
 
@@ -8,16 +9,16 @@ int main() {
     const int screenHeight = 820;
 
     // Initialize the window and bring it to the screen
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
     InitWindow(screenWidth, screenHeight, "FASTgram");
     SetWindowMinSize(360, 640);
 
     //background color
-
     Color backgroundColor = GetColor(0xF1F5F9FF);
 
 
     //FONTS sizes
-    Font fontTitle = LoadFontEx("resources/fonts/Roboto.ttf", 50, NULL, 0);
+    Font fontTitle = LoadFontEx("resources/fonts/LexendDeca.ttf", 50, NULL, 0);
 
     SetTextureFilter(fontTitle.texture, TEXTURE_FILTER_BILINEAR);
 
@@ -25,10 +26,6 @@ int main() {
     float displaySize = 30.0;
     float spacing = 1.0;
     Vector2 textSize = MeasureTextEx(fontTitle, "FASTagram", displaySize, spacing);
-    Vector2 position = {
-        (GetScreenWidth() - textSize.x) / 2.0f,
-        2.0f
-    };
     Color headingColor = GetColor(0x0F172AFF);
 
     // game/FASTgram loop running at 60FPS
@@ -45,6 +42,12 @@ int main() {
         ClearBackground(backgroundColor);
 
         //DrawText("FASTgram!", 200, 400, 24, DARKGRAY);
+
+        Vector2 position = {
+        (GetScreenWidth() - textSize.x) / 2.0f,
+        2.0f
+        };
+
         DrawTextEx(fontTitle, "FASTgram", position, displaySize, spacing, headingColor);
         EndDrawing();
     }
