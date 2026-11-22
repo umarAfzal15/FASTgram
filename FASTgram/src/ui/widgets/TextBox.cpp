@@ -72,13 +72,17 @@ void TextBox::draw() const {
         textColor = enabled ? Theme::primaryText() : Fade(Theme::primaryText(), 0.5f);
     }
 
-    DrawText(displayStr.c_str(), textX, textY, fontSize, textColor);
+    float spacing = 1.0f;
+    DrawTextEx(Theme::appFont, displayStr.c_str(), { 
+        static_cast<float>(textX), static_cast<float>(textY) 
+        }, static_cast<float>(fontSize), spacing, textColor);
 
     // 3. Draw blinking cursor when focused
     if (focused && enabled) {
         int blink = static_cast<int>(GetTime() * 2.0) % 2;
         if (blink == 0) {
-            int cursorX = textX + MeasureText(displayStr.c_str(), fontSize) + 2;
+            Vector2 textSize = MeasureTextEx(Theme::appFont, displayStr.c_str(), static_cast<float>(fontSize), spacing);
+            int cursorX = textX + static_cast<int>(textSize.x) + 2;
             int cursorTop = static_cast<int>(bounds.y) + 8;
             int cursorBottom = static_cast<int>(bounds.y + bounds.height) - 8;
             DrawLine(cursorX, cursorTop, cursorX, cursorBottom, Theme::primaryText());

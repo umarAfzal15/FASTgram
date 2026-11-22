@@ -58,11 +58,14 @@ void Button::draw() const {
         DrawRectangleRoundedLinesEx(bounds, 0.25f, 8, 1.5f, Theme::border());
     }
 
-    int textWidth = MeasureText(text.c_str(), fontSize);
-    int textX = bounds.x + (bounds.width - textWidth) / 2;
-    int textY = bounds.y + (bounds.height - fontSize) / 2;
+    float spacing = 1.0f;
+    Vector2 textSize = MeasureTextEx(Theme::appFont, text.c_str(), (float)fontSize, spacing);
+    Vector2 textPos = {
+        bounds.x + (bounds.width - textSize.x) / 2.0f,
+        bounds.y + (bounds.height - textSize.y) / 2.0f
+    };
 
-    DrawText(text.c_str(), textX, textY, fontSize, textColor);
+    DrawTextEx(Theme::appFont, text.c_str(), textPos, (float)fontSize, spacing, textColor);
 }
 
 // Click query

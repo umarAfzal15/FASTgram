@@ -1,6 +1,7 @@
 #include "Theme.h"
 
 bool Theme::darkMode = false;
+Font Theme::appFont = { 0 };
 
 void Theme::toggle() {
 	if (darkMode) {
