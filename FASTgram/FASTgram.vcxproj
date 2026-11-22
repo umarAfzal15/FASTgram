@@ -178,6 +178,7 @@
     <ClCompile Include="src\ui\screens\ProfileScreen.cpp" />
     <ClCompile Include="src\ui\screens\ScreenManager.cpp" />
     <ClCompile Include="src\ui\screens\SettingsScreen.cpp" />
+    <ClCompile Include="src\ui\screens\SignUpScreen.cpp" />
     <ClCompile Include="src\ui\screens\SocietyScreen.cpp" />
     <ClCompile Include="src\ui\widgets\Avatar.cpp" />
     <ClCompile Include="src\ui\widgets\Button.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="src\ui\screens\Screen.h" />
     <ClInclude Include="src\ui\screens\ScreenManager.h" />
     <ClInclude Include="src\ui\screens\SettingsScreen.h" />
+    <ClInclude Include="src\ui\screens\SignUpScreen.h" />
     <ClInclude Include="src\ui\screens\SocietyScreen.h" />
     <ClInclude Include="src\ui\widgets\Avatar.h" />
     <ClInclude Include="src\ui\widgets\Button.h" />

@@ -1,60 +1,61 @@
 #include "raylib.h"
 #include "src/core/Theme.h"
-#include <string>
-using namespace std;
+#include "src/ui/screens/ScreenManager.h"
+#include "src/ui/screens/LoginScreen.h"
+#include <algorithm>
 
 int main() {
-    // Window dimensions
-    const int screenWidth = 480;
-    const int screenHeight = 820;
+    const int defaultWidth = 480;
+    const int defaultHeight = 820;
 
-    // Initialize the window and bring it to the screen
+    // Setup resizable window
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
-    InitWindow(screenWidth, screenHeight, "FASTgram");
+    InitWindow(defaultWidth, defaultHeight, "FASTgram");
     SetWindowMinSize(360, 640);
-
-    //background color
-    Color backgroundColor = GetColor(0xF1F5F9FF);
-
-
-    //FONTS sizes
-    Font fontTitle = LoadFontEx("resources/fonts/LexendDeca.ttf", 50, NULL, 0);
-
-    SetTextureFilter(fontTitle.texture, TEXTURE_FILTER_BILINEAR);
-
-    //Vector2 position = { 190, 2 };
-    float displaySize = 30.0;
-    float spacing = 1.0;
-    Vector2 textSize = MeasureTextEx(fontTitle, "FASTagram", displaySize, spacing);
-    Color headingColor = GetColor(0x0F172AFF);
-
-    // game/FASTgram loop running at 60FPS
+    SetExitKey(KEY_NULL); // So Esc goes back instead of closing the app
     SetTargetFPS(60);
 
-    // Main game loop (runs until the user presses ESC or closes the window)
+    // Load app font
+    Font fontTitle = LoadFontEx("resources/fonts/LexendDeca.ttf", 50, nullptr, 0);
+    SetTextureFilter(fontTitle.texture, TEXTURE_FILTER_BILINEAR);
+    Theme::appFont = fontTitle;
+
+    // Start on login screen
+    ScreenManager screenManager;
+    LoginScreen* login = new LoginScreen(&screenManager, defaultWidth, defaultHeight);
+    screenManager.setScreen(login);
+
     while (!WindowShouldClose()) {
-        // --- 1. UPDATE LOGIC ---
-        // Update variables, positions, and inputs here
+        if (IsKeyPressed(KEY_F11)) {
+            ToggleFullscreen();
+        }
 
+        screenManager.update();
 
-        // --- 2. DRAW GRAPHICS ---
         BeginDrawing();
-        ClearBackground(backgroundColor);
 
-        //DrawText("FASTgram!", 200, 400, 24, DARKGRAY);
+        // Window background
+        ClearBackground(Theme::outerBackground());
 
-        Vector2 position = {
-        (GetScreenWidth() - textSize.x) / 2.0f,
-        2.0f
-        };
+        // Keep app inside a centered 480px column
+        float windowW = (float)GetScreenWidth();
+        float windowH = (float)GetScreenHeight();
+        float appWidth = std::min(480.0f, windowW);
+        float appX = (windowW - appWidth) / 2.0f;
 
-        DrawTextEx(fontTitle, "FASTgram", position, displaySize, spacing, headingColor);
+        Rectangle appColumn = { appX, 0.0f, appWidth, windowH };
+        DrawRectangleRec(appColumn, Theme::background());
+
+        if (windowW > 480.0f) {
+            DrawRectangleLinesEx(appColumn, 1.0f, Theme::border());
+        }
+
+        screenManager.draw();
+
         EndDrawing();
     }
 
-
     UnloadFont(fontTitle);
-    // closing the window
     CloseWindow();
 
     return 0;

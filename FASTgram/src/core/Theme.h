@@ -6,6 +6,7 @@ private:
     static bool darkMode;
 
 public:
+    static Font appFont;
     static void toggle();
     static void setDark(bool dark);
     static bool isDark();
