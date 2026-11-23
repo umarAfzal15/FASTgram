@@ -9,5 +9,5 @@ string FollowNotification::getIconType()const {
 }
 
 string FollowNotification::getActionRoute()const {
-	return "/ profile/" + to_string(actorUserId);
+	return "/profile/" + to_string(actorUserId);
 }
