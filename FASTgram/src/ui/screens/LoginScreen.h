@@ -2,14 +2,19 @@
 #include "raylib.h"
 #include <string>
 #include "Screen.h"
-#include "../src/core/Theme.h"
-#include "../src/ui/widgets/Button.h"
-#include "../src/ui/widgets/TextBox.h"
+#include "../../core/Theme.h"
+#include "../widgets/Button.h"
+#include "../widgets/TextBox.h"
+#include "../../services/UserManager.h"
+#include "../../services/FileManager.h"
 
 class ScreenManager;
+
 class LoginScreen : public Screen {
 private:
     ScreenManager* screenManager;
+    UserManager* userManager;
+    FileManager* fileManager;
     int screenWidth;
     int screenHeight;
     TextBox usernameBox;
@@ -19,7 +24,7 @@ private:
     std::string statusMessage;
 
 public:
-    LoginScreen(ScreenManager* manager, int screenWidth, int screenHeight);
+    LoginScreen(ScreenManager* manager, UserManager* users, FileManager* files, int screenWidth, int screenHeight);
 
     void update() override;
     void draw() const override;

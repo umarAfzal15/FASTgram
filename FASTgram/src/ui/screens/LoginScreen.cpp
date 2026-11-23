@@ -2,10 +2,12 @@
 #include "ScreenManager.h"
 #include "SignUpScreen.h"
 #include "../src/core/Theme.h"
-#include <fstream>
+#include <exception>
 
-LoginScreen::LoginScreen(ScreenManager* manager, int screenWidth, int screenHeight)
+LoginScreen::LoginScreen(ScreenManager* manager, UserManager* users, FileManager* files, int screenWidth, int screenHeight)
     : screenManager(manager),
+      userManager(users),
+      fileManager(files),
       screenWidth(screenWidth),
       screenHeight(screenHeight),
       usernameBox({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f - 80.0f, 300.0f, 45.0f }, "Username", false, 20, 18),
@@ -40,33 +42,20 @@ void LoginScreen::update() {
             this->statusMessage = "Please enter both username and password.";
         }
         else {
-            bool validLogin = (user == "admin" && pass == "1234");
-
-            if (!validLogin) {
-                std::ifstream inFile("data/users.txt");
-                std::string savedUser, savedPass;
-                while (inFile >> savedUser >> savedPass) {
-                    if (savedUser == user && savedPass == pass) {
-                        validLogin = true;
-                        break;
-                    }
-                }
-                inFile.close();
+            try {
+                Account* loggedInUser = this->userManager->login(user, pass);
+                this->statusMessage = "Welcome, " + loggedInUser->getDisplayName() + "!";
+                // TODO: Save session and switch to MainShellScreen
             }
-
-            if (validLogin) {
-                this->statusMessage = "Login successful!";
-                // later |=> this->screenManager->setScreen(new HomeScreen(...));
-            }
-            else {
-                this->statusMessage = "Invalid username or password.";
+            catch (const std::exception& ex) {
+                this->statusMessage = ex.what(); // Shows "Invalid username or password"
             }
         }
     }
 
     if (this->signUpButton.isClicked()) {
-        this->screenManager->setScreen(new SignUpScreen(this->screenManager, this->screenWidth, this->screenHeight));
-        return; // Stop running LoginScreen::update() immediately after switching!
+        this->screenManager->setScreen(new SignUpScreen(this->screenManager, this->userManager, this->fileManager, this->screenWidth, this->screenHeight));
+        return;
     }
 }
 
@@ -90,12 +79,12 @@ void LoginScreen::draw() const {
 
     // 3. Status message below the button using LexendDeca
     if (!this->statusMessage.empty()) {
+        float spacing = 1.0f;
         float msgSize = 16.0f;
         Vector2 msgDimensions = MeasureTextEx(Theme::appFont, this->statusMessage.c_str(), msgSize, spacing);
-        Rectangle btnBounds = this->signUpButton.getBounds();
         Vector2 msgPos = {
             (this->screenWidth - msgDimensions.x) / 2.0f,
-            btnBounds.y + btnBounds.height + 18.0f
+            this->screenHeight / 2.0f + 165.0f
         };
         DrawTextEx(Theme::appFont, this->statusMessage.c_str(), msgPos, msgSize, spacing, Theme::danger());
     }

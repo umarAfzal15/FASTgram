@@ -1,19 +1,24 @@
 #pragma once
 #include <string>
 #include "Screen.h"
-#include "../src/ui/widgets/TextBox.h"
-#include "../src/ui/widgets/Button.h"
+#include "../widgets/TextBox.h"
+#include "../widgets/Button.h"
+#include "../../services/UserManager.h"
+#include "../../services/FileManager.h"
 
 class ScreenManager; // Forward declaration to avoid circular include
 
 class SignUpScreen : public Screen {
 private:
     ScreenManager* screenManager;
+    UserManager* userManager;
+    FileManager* fileManager;
     int screenWidth;
     int screenHeight;
 
     TextBox fullNameBox;
     TextBox usernameBox;
+    TextBox rollNoBox;
     TextBox passwordBox;
     TextBox confirmPasswordBox;
 
@@ -24,7 +29,7 @@ private:
     bool isSuccess;
 
 public:
-    SignUpScreen(ScreenManager* manager, int screenWidth, int screenHeight);
+    SignUpScreen(ScreenManager* manager, UserManager* users, FileManager* files, int screenWidth, int screenHeight);
 
     void update() override;
     void draw() const override;

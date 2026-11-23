@@ -1,5 +1,7 @@
 #include "raylib.h"
 #include "../src/core/Theme.h"
+#include "../services/UserManager.h"
+#include "../services/FileManager.h"
 #include "../src/ui/screens/ScreenManager.h"
 #include "../src/ui/screens/LoginScreen.h"
 #include <algorithm>
@@ -21,9 +23,12 @@ int main() {
     Theme::appFont = fontTitle;
 
     // Start on login screen
+    UserManager userManager;
+    FileManager fileManager("data");
+    fileManager.loadUsers(userManager);
+
     ScreenManager screenManager;
-    LoginScreen* login = new LoginScreen(&screenManager, defaultWidth, defaultHeight);
-    screenManager.setScreen(login);
+    screenManager.setScreen(new LoginScreen(&screenManager, &userManager, &fileManager, GetScreenWidth(), GetScreenHeight()));
 
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_F11)) {
