@@ -2,9 +2,9 @@
 #include "raylib.h"
 #include <string>
 #include "Screen.h"
-#include "src/core/Theme.h"
-#include "src/ui/widgets/Button.h"
-#include "src/ui/widgets/TextBox.h"
+#include "../src/core/Theme.h"
+#include "../src/ui/widgets/Button.h"
+#include "../src/ui/widgets/TextBox.h"
 
 class ScreenManager;
 class LoginScreen : public Screen {

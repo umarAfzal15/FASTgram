@@ -1,7 +1,7 @@
 #include "raylib.h"
-#include "src/core/Theme.h"
-#include "src/ui/screens/ScreenManager.h"
-#include "src/ui/screens/LoginScreen.h"
+#include "../src/core/Theme.h"
+#include "../src/ui/screens/ScreenManager.h"
+#include "../src/ui/screens/LoginScreen.h"
 #include <algorithm>
 
 int main() {

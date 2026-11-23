@@ -1,7 +1,7 @@
 #include "LoginScreen.h"
 #include "ScreenManager.h"
 #include "SignUpScreen.h"
-#include "src/core/Theme.h"
+#include "../src/core/Theme.h"
 #include <fstream>
 
 LoginScreen::LoginScreen(ScreenManager* manager, int screenWidth, int screenHeight)

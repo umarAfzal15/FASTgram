@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include "Screen.h"
-#include "src/ui/widgets/TextBox.h"
-#include "src/ui/widgets/Button.h"
+#include "../src/ui/widgets/TextBox.h"
+#include "../src/ui/widgets/Button.h"
 
 class ScreenManager; // Forward declaration to avoid circular include
 

@@ -1,6 +1,6 @@
 #include "TextBox.h"
 #include <string>
-#include "src/core/Theme.h"
+#include "../src/core/Theme.h"
 
 TextBox::TextBox(Rectangle bounds, const std::string& placeholder, bool isPassword, int maxLength, int fontSize)
     : Widget(bounds) {

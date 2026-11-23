@@ -1,6 +1,6 @@
 #include "Button.h"
 #include <string>
-#include "src/core/Theme.h"
+#include "../src/core/Theme.h"
 using namespace std;
 
 Button::Button(Rectangle bounds, const string& text, ButtonStyle style, int fontSize): Widget(bounds) {
