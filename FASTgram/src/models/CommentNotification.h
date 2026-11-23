@@ -19,7 +19,3 @@ std::string getIconType()const override;
 std::string getActionRoute()const override;
 
 };
-
-
-
-
