@@ -1,18 +1,17 @@
 #include "raylib.h"
 #include "../src/core/Theme.h"
+#include "../src/core/Logger.h"
 #include "../services/UserManager.h"
 #include "../services/FileManager.h"
 #include "../src/ui/screens/ScreenManager.h"
 #include "../src/ui/screens/LoginScreen.h"
-#include <algorithm>
 
 int main() {
-    const int defaultWidth = 480;
-    const int defaultHeight = 820;
+    Theme::loadConfig();
 
     // Setup resizable window
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
-    InitWindow(defaultWidth, defaultHeight, "FASTgram");
+    InitWindow(Theme::getWindowWidth(), Theme::getWindowHeight(), "FASTgram");
     SetWindowMinSize(360, 640);
     SetExitKey(KEY_NULL); // So Esc goes back instead of closing the app
     SetTargetFPS(60);
@@ -26,6 +25,7 @@ int main() {
     UserManager userManager;
     FileManager fileManager("data");
     fileManager.loadUsers(userManager);
+    Logger::log("Application started");
 
     ScreenManager screenManager;
     screenManager.setScreen(new LoginScreen(&screenManager, &userManager, &fileManager, GetScreenWidth(), GetScreenHeight()));
@@ -45,7 +45,7 @@ int main() {
         // Keep app inside a centered 480px column
         float windowW = (float)GetScreenWidth();
         float windowH = (float)GetScreenHeight();
-        float appWidth = std::min(480.0f, windowW);
+        float appWidth = (windowW < 480.0f) ? windowW : 480.0f;
         float appX = (windowW - appWidth) / 2.0f;
 
         Rectangle appColumn = { appX, 0.0f, appWidth, windowH };

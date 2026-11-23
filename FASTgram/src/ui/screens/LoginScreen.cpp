@@ -1,19 +1,21 @@
 #include "LoginScreen.h"
 #include "ScreenManager.h"
 #include "SignUpScreen.h"
+#include "MainShellScreen.h"
 #include "../src/core/Theme.h"
+#include "../src/core/Logger.h"
 #include <exception>
 
 LoginScreen::LoginScreen(ScreenManager* manager, UserManager* users, FileManager* files, int screenWidth, int screenHeight)
     : screenManager(manager),
-      userManager(users),
-      fileManager(files),
-      screenWidth(screenWidth),
-      screenHeight(screenHeight),
-      usernameBox({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f - 80.0f, 300.0f, 45.0f }, "Username", false, 20, 18),
-      passwordBox({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f - 20.0f, 300.0f, 45.0f }, "Password", true, 20, 18),
-      loginButton({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f + 50.0f, 300.0f, 45.0f }, "Log In", ButtonStyle::Primary, 18),
-      signUpButton({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f + 110.0f, 300.0f, 45.0f }, "Create New Account", ButtonStyle::Secondary, 16)
+    userManager(users),
+    fileManager(files),
+    screenWidth(screenWidth),
+    screenHeight(screenHeight),
+    usernameBox({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f - 80.0f, 300.0f, 45.0f }, "Username", false, 20, 18),
+    passwordBox({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f - 20.0f, 300.0f, 45.0f }, "Password", true, 20, 18),
+    loginButton({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f + 50.0f, 300.0f, 45.0f }, "Log In", ButtonStyle::Primary, 18),
+    signUpButton({ screenWidth / 2.0f - 150.0f, screenHeight / 2.0f + 110.0f, 300.0f, 45.0f }, "Create New Account", ButtonStyle::Secondary, 16)
 {
 }
 
@@ -44,8 +46,11 @@ void LoginScreen::update() {
         else {
             try {
                 Account* loggedInUser = this->userManager->login(user, pass);
-                this->statusMessage = "Welcome, " + loggedInUser->getDisplayName() + "!";
-                // TODO: Save session and switch to MainShellScreen
+                Logger::log("Login: " + loggedInUser->getUsername());
+
+                MainShellScreen* shell = new MainShellScreen(this->screenManager, this->userManager, this->fileManager, loggedInUser);
+                this->screenManager->setScreen(shell);
+                return;
             }
             catch (const std::exception& ex) {
                 this->statusMessage = ex.what(); // Shows "Invalid username or password"
