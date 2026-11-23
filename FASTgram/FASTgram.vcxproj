@@ -156,8 +156,11 @@
     <ClCompile Include="src\models\Admin.cpp" />
     <ClCompile Include="src\models\Badge.cpp" />
     <ClCompile Include="src\models\Comment.cpp" />
+    <ClCompile Include="src\models\CommentNotification.cpp" />
     <ClCompile Include="src\models\Faculty.cpp" />
+    <ClCompile Include="src\models\FollowNotification.cpp" />
     <ClCompile Include="src\models\Group.cpp" />
+    <ClCompile Include="src\models\LikeNotification.cpp" />
     <ClCompile Include="src\models\Message.cpp" />
     <ClCompile Include="src\models\Notification.cpp" />
     <ClCompile Include="src\models\Post.cpp" />
@@ -206,8 +209,11 @@
     <ClInclude Include="src\models\Admin.h" />
     <ClInclude Include="src\models\Badge.h" />
     <ClInclude Include="src\models\Comment.h" />
+    <ClInclude Include="src\models\CommentNotification.h" />
     <ClInclude Include="src\models\Faculty.h" />
+    <ClInclude Include="src\models\FollowNotification.h" />
     <ClInclude Include="src\models\Group.h" />
+    <ClInclude Include="src\models\LikeNotification.h" />
     <ClInclude Include="src\models\Message.h" />
     <ClInclude Include="src\models\Notification.h" />
     <ClInclude Include="src\models\Post.h" />

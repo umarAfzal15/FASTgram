@@ -24,6 +24,6 @@ public:
 	
 	
 	void markAsRead();
-	virtual std::string getIconType() const = 0;
+	virtual std::string getIconType() const = 0;//these r pure virtual fns.
 	virtual std::string getActionRoute()const = 0;
 };
