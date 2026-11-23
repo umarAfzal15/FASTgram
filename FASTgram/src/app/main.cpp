@@ -1,5 +1,5 @@
 #include "raylib.h"
-#include "src/core/Theme.h"
+#include "../src/core/Theme.h"
 #include <string>
 using namespace std;
 
