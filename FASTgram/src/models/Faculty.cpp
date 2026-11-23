@@ -1,14 +1,24 @@
-#pragma once
-#include "Account.h"
+#include "Faculty.h"
 
-class Faculty : public Account
-{
-public:
-	Faculty();                       
-	Faculty(const std::string& username, const std::string& displayName, const std::string& rawPassword);
+Faculty::Faculty() : Account() {
+}
 
-	AccountType getType() const override;
-	std::string getBadgeLabel() const override;
-	bool canPostNotice() const override;
-	bool canDeleteAnyPost() const override;
-};
+Faculty::Faculty(const std::string& username, const std::string& displayName, const std::string& password)
+    : Account(username, displayName, password) {
+}
+
+AccountType Faculty::getType() const {
+    return AccountType::Faculty; // Match the enum name in Account.h
+}
+
+std::string Faculty::getBadgeLabel() const {
+    return "Faculty";
+}
+
+bool Faculty::canPostNotice() const {
+    return true;
+}
+
+bool Faculty::canDeleteAnyPost() const {
+    return false;
+}
