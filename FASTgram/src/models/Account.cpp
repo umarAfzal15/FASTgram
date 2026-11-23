@@ -1,6 +1,6 @@
+#include "core/BinaryIO.h"
 #include "Account.h"
 #include <cctype>
-#include <cstdint>      
 #include <functional>
 #include <stdexcept>
 
@@ -14,42 +14,12 @@ namespace
 		std::size_t h2 = std::hash<std::string>{}(rawPassword + "_FASTagram_pepper");
 		return std::to_string(h1) + "_" + std::to_string(h2);
 	}
-
-	void writeString(std::ostream& out, const std::string& str)
-	{
-		uint32_t len = static_cast<uint32_t>(str.size());     
-		out.write(reinterpret_cast<const char*>(&len), sizeof(len));
-		if (len > 0)
-		{
-			out.write(str.data(), static_cast<std::streamsize>(len));
-		}
-	}
-
-	std::string readString(std::istream& in)
-	{
-		uint32_t len = 0;                                      // CHANGED: fixed 4 bytes
-		in.read(reinterpret_cast<char*>(&len), sizeof(len));
-		if (!in || len > 1000000)
-		{
-			throw std::runtime_error("Corrupted string length in Account stream");
-		}
-		std::string str(len, '\0');
-		if (len > 0)
-		{
-			in.read(&str[0], static_cast<std::streamsize>(len));
-			if (!in)
-			{
-				throw std::runtime_error("Unexpected end of stream reading Account string");
-			}
-		}
-		return str;
-	}
 }
 
-Account::Account(): id(0), isPrivate(false)
+Account::Account() : id(0), isPrivate(false)
 {}
 
-Account::Account(const std::string& username, const std::string& displayName, const std::string& rawPassword): id(nextId++), isPrivate(false)
+Account::Account(const std::string& username, const std::string& displayName, const std::string& rawPassword) : id(nextId++), isPrivate(false)
 {
 	setUsername(username);
 	setDisplayName(displayName);
@@ -150,46 +120,31 @@ void Account::setNextId(int value)
 
 void Account::write(std::ostream& out) const
 {
-	out.write(reinterpret_cast<const char*>(&id), sizeof(id));
-	writeString(out, username);
-	writeString(out, displayName);
-	writeString(out, passwordHash);
-	writeString(out, bio);
-
-	uint8_t priv = isPrivate ? 1 : 0;                         
-	out.write(reinterpret_cast<const char*>(&priv), sizeof(priv));
+	BinaryIO::writeInt(out, id);
+	BinaryIO::writeString(out, username);
+	BinaryIO::writeString(out, displayName);
+	BinaryIO::writeString(out, passwordHash);
+	BinaryIO::writeString(out, bio);
+	BinaryIO::writeBool(out, isPrivate);
 }
 
 void Account::read(std::istream& in)
 {
-	int readId = 0;
-	in.read(reinterpret_cast<char*>(&readId), sizeof(readId));
-	if (!in)
-	{
-		throw std::runtime_error("Failed to read Account from stream");
-	}
-
-	std::string readUsername = readString(in);
-	std::string readDisplayName = readString(in);
-	std::string readPasswordHash = readString(in);
-	std::string readBio = readString(in);
-
-	uint8_t priv = 0;
-
-	in.read(reinterpret_cast<char*>(&priv), sizeof(priv));
-	if (!in)
-	{
-		throw std::runtime_error("Failed to read Account from stream");
-	}
+	int readId = BinaryIO::readInt(in);
+	std::string readUsername = BinaryIO::readString(in);
+	std::string readDisplayName = BinaryIO::readString(in);
+	std::string readPasswordHash = BinaryIO::readString(in);
+	std::string readBio = BinaryIO::readString(in);
+	bool readIsPrivate = BinaryIO::readBool(in);
 
 	id = readId;
 	username = readUsername;
 	displayName = readDisplayName;
 	passwordHash = readPasswordHash;
 	bio = readBio;
-	isPrivate = (priv != 0);
+	isPrivate = readIsPrivate;
 
-	if (id >= nextId)                                        
+	if (id >= nextId)
 	{
 		nextId = id + 1;
 	}
