@@ -77,7 +77,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,13 +153,17 @@
     <ClCompile Include="src\core\Theme.cpp" />
     <ClCompile Include="src\core\Time.cpp" />
     <ClCompile Include="src\models\Account.cpp" />
+    <ClCompile Include="src\models\Admin.cpp" />
     <ClCompile Include="src\models\Badge.cpp" />
     <ClCompile Include="src\models\Comment.cpp" />
+    <ClCompile Include="src\models\Faculty.cpp" />
     <ClCompile Include="src\models\Group.cpp" />
     <ClCompile Include="src\models\Message.cpp" />
     <ClCompile Include="src\models\Notification.cpp" />
     <ClCompile Include="src\models\Post.cpp" />
+    <ClCompile Include="src\models\Society.cpp" />
     <ClCompile Include="src\models\Story.cpp" />
+    <ClCompile Include="src\models\Student.cpp" />
     <ClCompile Include="src\services\ChatManager.cpp" />
     <ClCompile Include="src\services\FileManager.cpp" />
     <ClCompile Include="src\services\ImageStore.cpp" />
@@ -198,13 +202,17 @@
     <ClInclude Include="src\core\Theme.h" />
     <ClInclude Include="src\core\Time.h" />
     <ClInclude Include="src\models\Account.h" />
+    <ClInclude Include="src\models\Admin.h" />
     <ClInclude Include="src\models\Badge.h" />
     <ClInclude Include="src\models\Comment.h" />
+    <ClInclude Include="src\models\Faculty.h" />
     <ClInclude Include="src\models\Group.h" />
     <ClInclude Include="src\models\Message.h" />
     <ClInclude Include="src\models\Notification.h" />
     <ClInclude Include="src\models\Post.h" />
+    <ClInclude Include="src\models\Society.h" />
     <ClInclude Include="src\models\Story.h" />
+    <ClInclude Include="src\models\Student.h" />
     <ClInclude Include="src\services\ChatManager.h" />
     <ClInclude Include="src\services\FileManager.h" />
     <ClInclude Include="src\services\ImageStore.h" />
