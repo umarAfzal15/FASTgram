@@ -1,15 +1,27 @@
 #pragma once
 #include "raylib.h"
+#include <string>
 
 class Theme {
 private:
     static bool darkMode;
+    static int windowWidth;
+    static int windowHeight;
 
 public:
     static Font appFont;
     static void toggle();
     static void setDark(bool dark);
     static bool isDark();
+
+    static void setWindowSize(int width, int height);
+    static int getWindowWidth();
+    static int getWindowHeight();
+
+    static void loadConfig(const std::string& filePath = "data/config.txt");
+    static void saveConfig(const std::string& filePath = "data/config.txt");
+    static void loadConfig(int& w, int& h);
+    static void saveConfig(int w, int h);
 
     // Core UI Palette
     static Color outerBackground(); // Window backdrop outside the 480px column

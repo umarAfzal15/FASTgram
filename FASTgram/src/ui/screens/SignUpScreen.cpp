@@ -2,6 +2,7 @@
 #include "ScreenManager.h"
 #include "LoginScreen.h"
 #include "../src/core/Theme.h"
+#include "../src/core/Logger.h"
 #include <exception>
 
 SignUpScreen::SignUpScreen(ScreenManager* manager, UserManager* users, FileManager* files, int screenWidth, int screenHeight)
@@ -64,6 +65,7 @@ void SignUpScreen::update() {
                 bool registered = this->userManager->registerStudent(user, fullName, pass, roll);
                 if (registered) {
                     this->fileManager->saveUsers(*this->userManager);
+                    Logger::log("SignUp: " + user);
                     this->isSuccess = true;
                     this->statusMessage = "Account created! You can log in now.";
                 }

@@ -182,6 +182,7 @@
     <ClCompile Include="src\ui\screens\ExploreScreen.cpp" />
     <ClCompile Include="src\ui\screens\HomeScreen.cpp" />
     <ClCompile Include="src\ui\screens\LoginScreen.cpp" />
+    <ClCompile Include="src\ui\screens\MainShellScreen.cpp" />
     <ClCompile Include="src\ui\screens\NewPostScreen.cpp" />
     <ClCompile Include="src\ui\screens\NotificationScreen.cpp" />
     <ClCompile Include="src\ui\screens\PostDetailScreen.cpp" />
@@ -203,6 +204,7 @@
   <ItemGroup>
     <ClInclude Include="src\app\Application.h" />
     <ClInclude Include="src\core\Exceptions.h" />
+    <ClInclude Include="src\core\Logger.h" />
     <ClInclude Include="src\core\RollNumber.h" />
     <ClInclude Include="src\core\Serializable.h" />
     <ClInclude Include="src\core\Session.h" />
@@ -241,6 +243,7 @@
     <ClInclude Include="src\ui\screens\ExploreScreen.h" />
     <ClInclude Include="src\ui\screens\HomeScreen.h" />
     <ClInclude Include="src\ui\screens\LoginScreen.h" />
+    <ClInclude Include="src\ui\screens\MainShellScreen.h" />
     <ClInclude Include="src\ui\screens\NewPostScreen.h" />
     <ClInclude Include="src\ui\screens\NotificationScreen.h" />
     <ClInclude Include="src\ui\screens\PostDetailScreen.h" />

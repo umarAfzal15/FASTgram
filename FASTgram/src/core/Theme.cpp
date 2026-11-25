@@ -1,6 +1,9 @@
 #include "Theme.h"
+#include <fstream>
 
 bool Theme::darkMode = false;
+int Theme::windowWidth = 480;
+int Theme::windowHeight = 800;
 Font Theme::appFont = { 0 };
 
 void Theme::toggle() {
@@ -12,11 +15,59 @@ void Theme::toggle() {
 	}
 }
 
-void  Theme::setDark(bool dark) {
+void Theme::setDark(bool dark) {
 	darkMode = dark;
 }
-bool  Theme::isDark() {
+
+bool Theme::isDark() {
 	return darkMode;
+}
+
+void Theme::setWindowSize(int width, int height) {
+	windowWidth = width;
+	windowHeight = height;
+}
+
+int Theme::getWindowWidth() {
+	return windowWidth;
+}
+
+int Theme::getWindowHeight() {
+	return windowHeight;
+}
+
+void Theme::loadConfig(int& w, int& h) {
+	loadConfig("data/config.txt");
+	w = windowWidth;
+	h = windowHeight;
+}
+
+void Theme::saveConfig(int w, int h) {
+	windowWidth = w;
+	windowHeight = h;
+	saveConfig("data/config.txt");
+}
+
+void Theme::loadConfig(const std::string& filePath) {
+	std::ifstream file(filePath);
+	if (!file.is_open()) return;
+
+	int savedDark = 0;
+	int savedW = 480;
+	int savedH = 800;
+
+	if (file >> savedDark >> savedW >> savedH) {
+		darkMode = (savedDark == 1);
+		if (savedW >= 480) windowWidth = savedW;
+		if (savedH >= 600) windowHeight = savedH;
+	}
+}
+
+void Theme::saveConfig(const std::string& filePath) {
+	std::ofstream file(filePath);
+	if (!file.is_open()) return;
+
+	file << (darkMode ? 1 : 0) << " " << windowWidth << " " << windowHeight << "\n";
 }
 
 // Core UI Palette
@@ -100,7 +151,7 @@ Color Theme::accentHover() {
 		return GetColor(0x4338CAFF);
 	}
 }
-//
+
 Color Theme::danger() {
 	if (darkMode) {
 		return GetColor(0xFEE2E2FF);
