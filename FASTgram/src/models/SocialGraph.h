@@ -144,4 +144,55 @@ public:
         if (!isOwnerPrivate) return true;
         return isFollowing(viewerId, ownerId);
     }
+
+    // Day 4: Binary serialization helpers for follows.dat
+    const std::vector<std::pair<int, int>>& getFollowEdges() const { return followEdges; }
+    const std::vector<std::pair<int, int>>& getPendingRequestEdges() const { return pendingRequests; }
+    const std::vector<std::pair<int, int>>& getBlockedEdges() const { return blockedEdges; }
+    const std::vector<std::pair<int, int>>& getMutedEdges() const { return mutedEdges; }
+
+    void addLoadedFollow(int followerId, int targetId) {
+        if (followerId != targetId && !isFollowing(followerId, targetId)) {
+            followEdges.push_back({ followerId, targetId });
+        }
+    }
+    void addLoadedPendingRequest(int followerId, int targetId) {
+        if (followerId != targetId && !hasPendingRequest(followerId, targetId)) {
+            pendingRequests.push_back({ followerId, targetId });
+        }
+    }
+    void addLoadedBlock(int blockerId, int targetId) {
+        if (blockerId != targetId && !isBlocked(blockerId, targetId)) {
+            blockedEdges.push_back({ blockerId, targetId });
+        }
+    }
+    void addLoadedMute(int muterId, int targetId) {
+        if (muterId != targetId && !isMuted(muterId, targetId)) {
+            mutedEdges.push_back({ muterId, targetId });
+        }
+    }
+
+    // Day 4: Cascade delete all edges involving userId
+    void removeUser(int userId) {
+        for (int i = (int)followEdges.size() - 1; i >= 0; i--) {
+            if (followEdges[i].first == userId || followEdges[i].second == userId) {
+                followEdges.erase(followEdges.begin() + i);
+            }
+        }
+        for (int i = (int)pendingRequests.size() - 1; i >= 0; i--) {
+            if (pendingRequests[i].first == userId || pendingRequests[i].second == userId) {
+                pendingRequests.erase(pendingRequests.begin() + i);
+            }
+        }
+        for (int i = (int)blockedEdges.size() - 1; i >= 0; i--) {
+            if (blockedEdges[i].first == userId || blockedEdges[i].second == userId) {
+                blockedEdges.erase(blockedEdges.begin() + i);
+            }
+        }
+        for (int i = (int)mutedEdges.size() - 1; i >= 0; i--) {
+            if (mutedEdges[i].first == userId || mutedEdges[i].second == userId) {
+                mutedEdges.erase(mutedEdges.begin() + i);
+            }
+        }
+    }
 };

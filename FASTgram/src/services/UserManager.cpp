@@ -19,7 +19,8 @@ namespace
 }
 
 UserManager::UserManager()
-{}
+{
+}
 
 UserManager::~UserManager()
 {
@@ -78,7 +79,7 @@ bool UserManager::rollNumberExists(const RollNumber& roll) const
 {
 	for (Account* a : accounts)
 	{
-		Student* s = dynamic_cast<Student*>(a);   
+		Student* s = dynamic_cast<Student*>(a);
 		if (s != nullptr && s->getRollNumber() == roll)
 		{
 			return true;
@@ -136,4 +137,48 @@ Account* UserManager::login(const std::string& username, const std::string& pass
 		throw std::invalid_argument("Invalid username or password");
 	}
 	return acc;
+}
+
+bool UserManager::deleteAccount(int userId)
+{
+	for (int i = 0; i < static_cast<int>(accounts.size()); i++)
+	{
+		if (accounts[i] != nullptr && accounts[i]->getId() == userId)
+		{
+			delete accounts[i];
+			accounts.erase(accounts.begin() + i);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool UserManager::deleteAccount(int userId, std::vector<Post*>& posts, std::vector<Comment*>& comments, SocialGraph& graph)
+{
+	if (findById(userId) == nullptr)
+	{
+		return false;
+	}
+
+	graph.removeUser(userId);
+
+	for (int i = static_cast<int>(comments.size()) - 1; i >= 0; i--)
+	{
+		if (comments[i] != nullptr && comments[i]->getAuthorId() == userId)
+		{
+			delete comments[i];
+			comments.erase(comments.begin() + i);
+		}
+	}
+
+	for (int i = static_cast<int>(posts.size()) - 1; i >= 0; i--)
+	{
+		if (posts[i] != nullptr && posts[i]->getAuthorId() == userId)
+		{
+			delete posts[i];
+			posts.erase(posts.begin() + i);
+		}
+	}
+
+	return deleteAccount(userId);
 }
