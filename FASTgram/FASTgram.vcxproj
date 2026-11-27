@@ -148,13 +148,16 @@
   <ItemGroup>
     <ClCompile Include="src\app\Application.cpp" />
     <ClCompile Include="src\app\main.cpp" />
+    <ClCompile Include="src\core\PostFactory.cpp" />
     <ClCompile Include="src\core\RollNumber.cpp" />
     <ClCompile Include="src\core\Session.cpp" />
+    <ClCompile Include="src\core\TextParser.cpp" />
     <ClCompile Include="src\core\Theme.cpp" />
     <ClCompile Include="src\core\Time.cpp" />
     <ClCompile Include="src\models\Account.cpp" />
     <ClCompile Include="src\models\Admin.cpp" />
     <ClCompile Include="src\models\Badge.cpp" />
+    <ClCompile Include="src\models\CarouselPost.cpp" />
     <ClCompile Include="src\models\Comment.cpp" />
     <ClCompile Include="src\models\CommentNotification.cpp" />
     <ClCompile Include="src\models\Faculty.cpp" />
@@ -164,6 +167,8 @@
     <ClCompile Include="src\models\Message.cpp" />
     <ClCompile Include="src\models\Notification.cpp" />
     <ClCompile Include="src\models\PhotoMessage.cpp" />
+    <ClCompile Include="src\models\PhotoPost.cpp" />
+    <ClCompile Include="src\models\PollPost.cpp" />
     <ClCompile Include="src\models\Post.cpp" />
     <ClCompile Include="src\models\PracticeBot.cpp" />
     <ClCompile Include="src\models\SharedPostMessage.cpp" />
@@ -173,6 +178,7 @@
     <ClCompile Include="src\models\TextFileManager.cpp" />
     <ClCompile Include="src\models\TextMessage.cpp" />
     <ClCompile Include="src\models\TextParser.cpp" />
+    <ClCompile Include="src\models\TextPost.cpp" />
     <ClCompile Include="src\models\UndoAction.cpp" />
     <ClCompile Include="src\services\BlurFilter.cpp" />
     <ClCompile Include="src\services\BrightnessFilter.cpp" />
@@ -214,16 +220,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\Application.h" />
+    <ClInclude Include="src\core\BinaryIO.h" />
     <ClInclude Include="src\core\Exceptions.h" />
     <ClInclude Include="src\core\Logger.h" />
+    <ClInclude Include="src\core\PostFactory.h" />
     <ClInclude Include="src\core\RollNumber.h" />
     <ClInclude Include="src\core\Serializable.h" />
     <ClInclude Include="src\core\Session.h" />
+    <ClInclude Include="src\core\TextParser.h" />
     <ClInclude Include="src\core\Theme.h" />
     <ClInclude Include="src\core\Time.h" />
     <ClInclude Include="src\models\Account.h" />
     <ClInclude Include="src\models\Admin.h" />
     <ClInclude Include="src\models\Badge.h" />
+    <ClInclude Include="src\models\CarouselPost.h" />
     <ClInclude Include="src\models\Comment.h" />
     <ClInclude Include="src\models\CommentNotification.h" />
     <ClInclude Include="src\models\Faculty.h" />
@@ -234,6 +244,8 @@
     <ClInclude Include="src\models\Message.h" />
     <ClInclude Include="src\models\Notification.h" />
     <ClInclude Include="src\models\PhotoMessage.h" />
+    <ClInclude Include="src\models\PhotoPost.h" />
+    <ClInclude Include="src\models\PollPost.h" />
     <ClInclude Include="src\models\Post.h" />
     <ClInclude Include="src\models\PracticeBot.h" />
     <ClInclude Include="src\models\SharedPostMessage.h" />
@@ -245,6 +257,7 @@
     <ClInclude Include="src\models\TextFileManager.h" />
     <ClInclude Include="src\models\TextMessage.h" />
     <ClInclude Include="src\models\TextParser.h" />
+    <ClInclude Include="src\models\TextPost.h" />
     <ClInclude Include="src\models\UndoAction.h" />
     <ClInclude Include="src\services\BlurFilter.h" />
     <ClInclude Include="src\services\BrightnessFilter.h" />

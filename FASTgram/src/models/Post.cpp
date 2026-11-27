@@ -3,17 +3,22 @@
 int Post::nextId = 1;
 
 Post::Post()
-    : id(0), authorId(0), caption(""), timestamp(), isArchived(false), isPinned(false) {
+    : id(0), authorId(0), caption(""), timestamp(), archived(false), pinned(false) {
+}
+
+Post::Post(int authorId, const std::string& caption)
+    : id(nextId++), authorId(authorId), caption(caption), timestamp(Time::now()),
+    archived(false), pinned(false) {
 }
 
 Post::Post(int authorId, const std::string& caption, const Time& timestamp)
     : id(nextId++), authorId(authorId), caption(caption), timestamp(timestamp),
-    isArchived(false), isPinned(false) {
+    archived(false), pinned(false) {
 }
 
 Post::Post(int id, int authorId, const std::string& caption, const Time& timestamp)
     : id(id), authorId(authorId), caption(caption), timestamp(timestamp),
-    isArchived(false), isPinned(false) {
+    archived(false), pinned(false) {
     if (id >= nextId) {
         nextId = id + 1;
     }
@@ -36,23 +41,31 @@ const Time& Post::getTimestamp() const {
 }
 
 bool Post::getIsArchived() const {
-    return isArchived;
+    return archived;
 }
 
 bool Post::getIsPinned() const {
-    return isPinned;
+    return pinned;
+}
+
+bool Post::isArchived() const {
+    return archived;
+}
+
+bool Post::isPinned() const {
+    return pinned;
 }
 
 void Post::setCaption(const std::string& newCaption) {
     caption = newCaption;
 }
 
-void Post::setArchived(bool archived) {
-    isArchived = archived;
+void Post::setArchived(bool value) {
+    archived = value;
 }
 
-void Post::setPinned(bool pinned) {
-    isPinned = pinned;
+void Post::setPinned(bool value) {
+    pinned = value;
 }
 
 void Post::toggleLike(int userId) {
@@ -99,8 +112,8 @@ void Post::write(std::ostream& out) const {
         out.write(reinterpret_cast<const char*>(&uid), sizeof(uid));
     }
 
-    out.write(reinterpret_cast<const char*>(&isArchived), sizeof(isArchived));
-    out.write(reinterpret_cast<const char*>(&isPinned), sizeof(isPinned));
+    out.write(reinterpret_cast<const char*>(&archived), sizeof(archived));
+    out.write(reinterpret_cast<const char*>(&pinned), sizeof(pinned));
 }
 
 void Post::read(std::istream& in) {
@@ -126,8 +139,8 @@ void Post::read(std::istream& in) {
         likedUserIds.push_back(uid);
     }
 
-    in.read(reinterpret_cast<char*>(&isArchived), sizeof(isArchived));
-    in.read(reinterpret_cast<char*>(&isPinned), sizeof(isPinned));
+    in.read(reinterpret_cast<char*>(&archived), sizeof(archived));
+    in.read(reinterpret_cast<char*>(&pinned), sizeof(pinned));
 
     if (id >= nextId) {
         nextId = id + 1;

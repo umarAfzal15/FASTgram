@@ -21,8 +21,8 @@ private:
     std::string caption;
     Time timestamp;
     std::vector<int> likedUserIds;
-    bool isArchived;
-    bool isPinned;
+    bool archived;
+    bool pinned;
 
     static int nextId;
 
@@ -30,6 +30,7 @@ protected:
     Post();
 
 public:
+    Post(int authorId, const std::string& caption);
     Post(int authorId, const std::string& caption, const Time& timestamp);
     Post(int id, int authorId, const std::string& caption, const Time& timestamp);
     virtual ~Post() = default;
@@ -41,8 +42,10 @@ public:
     const Time& getTimestamp() const;
     bool getIsArchived() const;
     bool getIsPinned() const;
+    bool isArchived() const;
+    bool isPinned() const;
 
-    void setCaption(const std::string& newCaption);
+    virtual void setCaption(const std::string& newCaption);
     void setArchived(bool archived);
     void setPinned(bool pinned);
 
