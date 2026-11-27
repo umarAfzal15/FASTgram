@@ -1,6 +1,7 @@
 #pragma once
 #include "Screen.h"
 #include "../src/ui/Widgets/Modal.h"
+#include "../src/ui/Widgets/Toggle.h"
 #include "../src/core/Theme.h"
 #include "../src/core/Logger.h"
 #include "raylib.h"
@@ -18,6 +19,7 @@ private:
     Rectangle accountRowBounds;
     Rectangle logoutBtnBounds;
 
+    Toggle darkModeToggle;
     Modal logoutModal;
     bool backRequested;
     bool logoutRequested;

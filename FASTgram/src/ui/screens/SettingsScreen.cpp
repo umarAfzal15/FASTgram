@@ -10,6 +10,7 @@ SettingsScreen::SettingsScreen(Rectangle contentBounds, const std::string& usern
     windowLargeBtnBounds({ 0.0f, 0.0f, 0.0f, 0.0f }),
     accountRowBounds({ 0.0f, 0.0f, 0.0f, 0.0f }),
     logoutBtnBounds({ 0.0f, 0.0f, 0.0f, 0.0f }),
+    darkModeToggle({ 0.0f, 0.0f, 50.0f, 28.0f }, Theme::isDark()),
     backRequested(false),
     logoutRequested(false)
 {
@@ -48,9 +49,14 @@ void SettingsScreen::updateLayout() {
     y += 50.0f;
 
     themeRowBounds = { x, y, rowW, rowH };
+    darkModeToggle.setBounds({
+        themeRowBounds.x + themeRowBounds.width - 66.0f,
+        themeRowBounds.y + (themeRowBounds.height - 28.0f) / 2.0f,
+        50.0f,
+        28.0f
+        });
     y += rowH + 12.0f;
 
-    // Two side-by-side window size preset buttons inside the Window Size row
     float halfW = (rowW - 10.0f) / 2.0f;
     windowSmallBtnBounds = { x, y + 26.0f, halfW, 36.0f };
     windowLargeBtnBounds = { x + halfW + 10.0f, y + 26.0f, halfW, 36.0f };
@@ -73,6 +79,15 @@ void SettingsScreen::update() {
         return;
     }
 
+    darkModeToggle.setToggled(Theme::isDark());
+    darkModeToggle.update();
+    if (darkModeToggle.isToggled() != Theme::isDark()) {
+        Theme::toggle();
+        Theme::saveConfig();
+        Logger::log(Theme::isDark() ? "Theme set to Dark" : "Theme set to Light");
+        return;
+    }
+
     Vector2 mouse = GetMousePosition();
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -81,6 +96,7 @@ void SettingsScreen::update() {
         }
         else if (CheckCollisionPointRec(mouse, themeRowBounds)) {
             Theme::toggle();
+            darkModeToggle.setToggled(Theme::isDark());
             Theme::saveConfig();
             Logger::log(Theme::isDark() ? "Theme set to Dark" : "Theme set to Light");
         }
@@ -114,17 +130,12 @@ void SettingsScreen::draw() const {
 
     DrawTextEx(Theme::appFont, "Settings", { backBtnBounds.x + 88.0f, backBtnBounds.y + 5.0f }, 22.0f, 1.0f, Theme::primaryText());
 
-    // 1. Theme Toggle Row
     Color themeBg = CheckCollisionPointRec(mouse, themeRowBounds) ? Theme::surfaceHover() : Theme::surface();
     DrawRectangleRounded(themeRowBounds, 0.18f, 8, themeBg);
     DrawRectangleRoundedLinesEx(themeRowBounds, 0.18f, 8, 1.0f, Theme::border());
-    DrawTextEx(Theme::appFont, "Appearance", { themeRowBounds.x + 16.0f, themeRowBounds.y + 17.0f }, 17.0f, 1.0f, Theme::primaryText());
+    DrawTextEx(Theme::appFont, "Dark Mode", { themeRowBounds.x + 16.0f, themeRowBounds.y + 17.0f }, 17.0f, 1.0f, Theme::primaryText());
+    darkModeToggle.draw();
 
-    const char* modeText = Theme::isDark() ? "Dark Mode" : "Light Mode";
-    Vector2 modeSize = MeasureTextEx(Theme::appFont, modeText, 16.0f, 1.0f);
-    DrawTextEx(Theme::appFont, modeText, { themeRowBounds.x + themeRowBounds.width - modeSize.x - 16.0f, themeRowBounds.y + 18.0f }, 16.0f, 1.0f, Theme::accent());
-
-    // 2. Window Size Presets
     DrawTextEx(Theme::appFont, "Window Size", { windowSmallBtnBounds.x, windowSmallBtnBounds.y - 24.0f }, 15.0f, 1.0f, Theme::secondaryText());
 
     bool isCompact = (Theme::getWindowWidth() == 480);
@@ -152,7 +163,6 @@ void SettingsScreen::draw() const {
         windowLargeBtnBounds.y + (windowLargeBtnBounds.height - largeSize.y) / 2.0f
         }, btnFontSize, 1.0f, largeText);
 
-    // 3. Account Info Row
     DrawRectangleRounded(accountRowBounds, 0.18f, 8, Theme::surface());
     DrawRectangleRoundedLinesEx(accountRowBounds, 0.18f, 8, 1.0f, Theme::border());
     DrawTextEx(Theme::appFont, "Logged in as", { accountRowBounds.x + 16.0f, accountRowBounds.y + 17.0f }, 16.0f, 1.0f, Theme::secondaryText());
@@ -161,7 +171,6 @@ void SettingsScreen::draw() const {
     Vector2 handleSize = MeasureTextEx(Theme::appFont, handle.c_str(), 16.0f, 1.0f);
     DrawTextEx(Theme::appFont, handle.c_str(), { accountRowBounds.x + accountRowBounds.width - handleSize.x - 16.0f, accountRowBounds.y + 17.0f }, 16.0f, 1.0f, Theme::primaryText());
 
-    // 4. Log Out Button
     Color logoutBg = CheckCollisionPointRec(mouse, logoutBtnBounds) ? Theme::surfaceHover() : Theme::surface();
     DrawRectangleRounded(logoutBtnBounds, 0.2f, 8, logoutBg);
     DrawRectangleRoundedLinesEx(logoutBtnBounds, 0.2f, 8, 1.5f, Theme::danger());
