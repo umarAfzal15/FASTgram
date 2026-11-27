@@ -1,21 +1,27 @@
 #pragma once
 #include "Screen.h"
+#include <vector>
 
 class ScreenManager {
 private:
     Screen* currentScreen;
+    std::vector<Screen*> screenStack;
+    std::vector<Screen*> pendingDelete;
+
+    void flushPendingDeletes();
 
 public:
     ScreenManager();
     ~ScreenManager();
 
-    // Switch to a new screen (cleans up old screen, initializes new one)
     void setScreen(Screen* newScreen);
+    void pushScreen(Screen* newScreen);
+    void popScreen();
+    void clearStack();
 
-    // Frame loop forwarding
     void update();
     void draw() const;
 
-    // State check
     bool hasScreen() const;
+    bool canGoBack() const;
 };

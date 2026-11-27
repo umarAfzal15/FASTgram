@@ -178,7 +178,6 @@
     <ClCompile Include="src\models\Student.cpp" />
     <ClCompile Include="src\models\TextFileManager.cpp" />
     <ClCompile Include="src\models\TextMessage.cpp" />
-    <ClCompile Include="src\models\TextParser.cpp" />
     <ClCompile Include="src\models\TextPost.cpp" />
     <ClCompile Include="src\models\UndoAction.cpp" />
     <ClCompile Include="src\services\ChatManager.cpp" />
@@ -196,6 +195,7 @@
     <ClCompile Include="src\ui\screens\MainShellScreen.cpp" />
     <ClCompile Include="src\ui\screens\NewPostScreen.cpp" />
     <ClCompile Include="src\ui\screens\NotificationScreen.cpp" />
+    <ClCompile Include="src\ui\screens\PeopleListScreen.cpp" />
     <ClCompile Include="src\ui\screens\PostDetailScreen.cpp" />
     <ClCompile Include="src\ui\screens\ProfileScreen.cpp" />
     <ClCompile Include="src\ui\screens\ScreenManager.cpp" />
@@ -269,6 +269,7 @@
     <ClInclude Include="src\ui\screens\MainShellScreen.h" />
     <ClInclude Include="src\ui\screens\NewPostScreen.h" />
     <ClInclude Include="src\ui\screens\NotificationScreen.h" />
+    <ClInclude Include="src\ui\screens\PeopleListScreen.h" />
     <ClInclude Include="src\ui\screens\PostDetailScreen.h" />
     <ClInclude Include="src\ui\screens\ProfileScreen.h" />
     <ClInclude Include="src\ui\screens\Screen.h" />

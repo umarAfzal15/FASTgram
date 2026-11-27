@@ -1,20 +1,19 @@
 #include "HomeScreen.h"
 #include "raylib.h"
 
-// Models
 #include "../../models/Post.h"
 #include "../../models/Account.h"
 #include "../../models/SocialGraph.h"
 
-// Services
 #include "../../services/UserManager.h"
 #include "../../services/ImageStore.h"
-// #include "../../services/PostManager.h" // Uncomment when PostManager.h is ready
+#include "../../services/PostManager.h"
 
-// UI / Core / Widgets
 #include "../../core/Theme.h"
 #include "../Widgets/Avatar.h"
 #include "MainShellScreen.h"
+
+#include <vector>
 
 HomeScreen::HomeScreen(MainShellScreen* shell,
     PostManager* postMgr,
@@ -46,40 +45,34 @@ HomeScreen::HomeScreen(MainShellScreen* shell,
 }
 
 void HomeScreen::rebuildFeed() {
-    // 1. Reset cached visible posts
     visiblePostCount = 0;
     for (int i = 0; i < MAX_FEED_POSTS; i++) {
         visiblePosts[i] = nullptr;
     }
 
-    if (postManager == nullptr || activeSorter == nullptr || currentUser == nullptr) {
+    if (postManager == nullptr || activeSorter == nullptr || currentUser == nullptr || userManager == nullptr) {
         return;
     }
 
     int viewerId = currentUser->getId();
+    std::vector<Post*> allPosts = postManager->getPublicPosts(*userManager);
 
-    // Fetch posts from PostManager PostManager.h is not written yet so will uncomment later
-    /*
-    int totalPosts = postManager->getPostCount();
-    for (int i = 0; i < totalPosts; i++) {
-        Post* post = postManager->getPostByIndex(i);
+    for (Post* post : allPosts) {
         if (post == nullptr) {
             continue;
         }
 
         int authorId = post->getAuthorId();
         bool isOwnerPrivate = false;
-        if (userManager != nullptr) {
-            Account* author = userManager->findById(authorId);
-            if (author != nullptr) {
-                isOwnerPrivate = author->getIsPrivate();
-            }
+        Account* author = userManager->findById(authorId);
+        if (author != nullptr) {
+            isOwnerPrivate = author->getIsPrivate();
         }
 
         bool canView = true;
         if (socialGraph != nullptr) {
             canView = socialGraph->canViewContent(viewerId, authorId, isOwnerPrivate)
-                      && !socialGraph->isMuted(viewerId, authorId);
+                && !socialGraph->isMuted(viewerId, authorId);
         }
 
         if (canView && activeSorter->shouldInclude(post)) {
@@ -89,10 +82,7 @@ void HomeScreen::rebuildFeed() {
             }
         }
     }
-    */
-    (void)viewerId;
 
-    // Sort visiblePosts using the active FeedSorter functor
     for (int i = 0; i < visiblePostCount - 1; i++) {
         for (int j = 0; j < visiblePostCount - i - 1; j++) {
             if ((*activeSorter)(visiblePosts[j + 1], visiblePosts[j])) {
@@ -103,7 +93,6 @@ void HomeScreen::rebuildFeed() {
         }
     }
 
-    // Recalculate total content height and update ScrollView bounds
     float cardWidth = (mainShell != nullptr) ? (mainShell->getContentBounds().width - 40.0f) : 560.0f;
     float cardSpacing = 12.0f;
     float totalHeight = 0.0f;
@@ -186,6 +175,20 @@ void HomeScreen::handlePostCardInput(Post* post, Rectangle cardRect) {
     int currentUserId = currentUser->getId();
     int postId = post->getId();
 
+    Rectangle authorHeaderRect = {
+        cardRect.x + 12.0f,
+        cardRect.y + 8.0f,
+        cardRect.width - 80.0f,
+        36.0f
+    };
+
+    if (CheckCollisionPointRec(mousePos, authorHeaderRect)) {
+        if (mainShell != nullptr) {
+            mainShell->openProfile(post->getAuthorId());
+        }
+        return;
+    }
+
     float footerHeight = 36.0f;
     Rectangle likeBtnRect = {
         cardRect.x + 12.0f,
@@ -194,13 +197,11 @@ void HomeScreen::handlePostCardInput(Post* post, Rectangle cardRect) {
         28.0f
     };
 
-    // Toggle like when clicking the like button
     if (CheckCollisionPointRec(mousePos, likeBtnRect)) {
         post->toggleLike(currentUserId);
         return;
     }
 
-    // Double-click anywhere on the card to like
     double now = GetTime();
     if (lastClickedPostId == postId && (now - lastClickTime) <= 0.30) {
         if (!post->isLikedBy(currentUserId)) {
@@ -214,9 +215,8 @@ void HomeScreen::handlePostCardInput(Post* post, Rectangle cardRect) {
     lastClickedPostId = postId;
     lastClickTime = now;
 
-    // Open full post view on single click
     if (mainShell != nullptr) {
-        // mainShell->pushDetailScreen(new PostDetailScreen(mainShell, post, currentUser, userManager, socialGraph, imageStore));
+        mainShell->openPostDetail(postId);
     }
 }
 
@@ -224,7 +224,6 @@ void HomeScreen::drawSortBar(Rectangle bounds) const {
     const char* labels[3] = { "Newest", "Most Liked", "Following" };
     const int tabCount = 3;
 
-    // Draw sort bar background and bottom divider
     DrawRectangleRec(bounds, { 24, 24, 28, 255 });
     DrawLine(static_cast<int>(bounds.x),
         static_cast<int>(bounds.y + bounds.height),
@@ -263,7 +262,6 @@ void HomeScreen::drawPostCard(const Post* post, Rectangle cardRect) const {
         return;
     }
 
-    // Card background and border
     DrawRectangleRounded(cardRect, 0.04f, 8, { 28, 28, 34, 255 });
     DrawRectangleRoundedLinesEx(cardRect, 0.04f, 8, 1.0f, { 50, 50, 58, 255 });
 
@@ -271,7 +269,6 @@ void HomeScreen::drawPostCard(const Post* post, Rectangle cardRect) const {
     float headerHeight = 40.0f;
     float footerHeight = 36.0f;
 
-    // Resolve author info via UserManager
     std::string authorName = "Unknown";
     std::string badgeLabel = "";
     if (userManager != nullptr) {
@@ -282,7 +279,6 @@ void HomeScreen::drawPostCard(const Post* post, Rectangle cardRect) const {
         }
     }
 
-    // Author avatar circle + display name
     float avatarRadius = 15.0f;
     Vector2 avatarCenter = { cardRect.x + pad + avatarRadius, cardRect.y + pad + avatarRadius };
     DrawCircleV(avatarCenter, avatarRadius, { 70, 130, 255, 255 });
@@ -307,7 +303,6 @@ void HomeScreen::drawPostCard(const Post* post, Rectangle cardRect) const {
         DrawText(pinText, static_cast<int>(cardRect.x + cardRect.width - pad - pinW), nameY + 2, 12, { 255, 200, 90, 255 });
     }
 
-    // Post caption body
     float bodyY = cardRect.y + pad + headerHeight;
     DrawText(post->getCaption().c_str(),
         static_cast<int>(cardRect.x + pad),
@@ -315,7 +310,6 @@ void HomeScreen::drawPostCard(const Post* post, Rectangle cardRect) const {
         15,
         { 225, 225, 232, 255 });
 
-    // Footer divider and Like button (matches handlePostCardInput geometry)
     float footerY = cardRect.y + cardRect.height - footerHeight;
     DrawLine(static_cast<int>(cardRect.x + pad),
         static_cast<int>(footerY),
@@ -359,7 +353,6 @@ float HomeScreen::calculateCardHeight(const Post* post, float cardWidth) const {
         usableWidth = 40.0f;
     }
 
-    // Estimate wrapped line count from caption text width and explicit newlines
     const std::string& caption = post->getCaption();
     int lineCount = 1;
     std::string currentLine = "";
@@ -383,7 +376,6 @@ float HomeScreen::calculateCardHeight(const Post* post, float cardWidth) const {
     float captionHeight = static_cast<float>(lineCount) * lineHeight;
     float mediaHeight = 0.0f;
 
-    // Reserve extra height if the post includes an image
     PostType type = post->getPostType();
     if (type == PostType::Photo || type == PostType::Carousel) {
         mediaHeight = 200.0f;
@@ -393,7 +385,6 @@ float HomeScreen::calculateCardHeight(const Post* post, float cardWidth) const {
 }
 
 void HomeScreen::onEnter() {
-    // Sync ScrollView viewport below the 48px sort bar
     if (mainShell != nullptr) {
         Rectangle content = mainShell->getContentBounds();
         float sortBarHeight = 48.0f;
@@ -406,7 +397,6 @@ void HomeScreen::onEnter() {
         feedScroll.setBounds(scrollBounds);
     }
 
-    // Refresh feed whenever navigating back to HomeScreen
     rebuildFeed();
 }
 
@@ -430,11 +420,9 @@ void HomeScreen::update() {
         content.height - sortBarHeight
     };
 
-    // Handle sort tab clicks and mouse wheel scrolling
     handleSortBarInput(sortBarBounds);
     feedScroll.update();
 
-    // Check clicks on visible post cards inside the scroll viewport
     Vector2 mousePos = GetMousePosition();
     if (!CheckCollisionPointRec(mousePos, scrollBounds)) {
         return;
@@ -459,7 +447,6 @@ void HomeScreen::update() {
             cardHeight
         };
 
-        // Only test cards currently overlapping the visible scroll area
         if (cardRect.y + cardRect.height >= scrollBounds.y &&
             cardRect.y <= scrollBounds.y + scrollBounds.height) {
             handlePostCardInput(post, cardRect);
@@ -474,7 +461,6 @@ void HomeScreen::draw() const {
         ? mainShell->getContentBounds()
         : Rectangle{ 0.0f, 60.0f, 600.0f, 680.0f };
 
-    // Screen background
     DrawRectangleRec(content, { 18, 18, 22, 255 });
 
     float sortBarHeight = 48.0f;
@@ -492,7 +478,6 @@ void HomeScreen::draw() const {
         content.height - sortBarHeight
     };
 
-    // Clip scrollable feed cards to the viewport below the sort bar
     feedScroll.beginClip();
 
     if (visiblePostCount == 0) {
@@ -523,7 +508,6 @@ void HomeScreen::draw() const {
                 cardHeight
             };
 
-            // Only draw cards overlapping the visible scroll viewport
             if (cardRect.y + cardRect.height >= scrollBounds.y &&
                 cardRect.y <= scrollBounds.y + scrollBounds.height) {
                 drawPostCard(post, cardRect);
@@ -535,7 +519,6 @@ void HomeScreen::draw() const {
 
     feedScroll.endClip();
 
-    // Draw scrollbar and top sort bar on top of clipped feed
     feedScroll.draw();
     drawSortBar(sortBarBounds);
 }

@@ -2,6 +2,10 @@
 #include "ScreenManager.h"
 #include "LoginScreen.h"
 #include "SettingsScreen.h"
+#include "HomeScreen.h"
+#include "ExploreScreen.h"
+#include "ProfileScreen.h"
+#include "PostDetailScreen.h"
 #include "../../models/Account.h"
 
 MainShellScreen::MainShellScreen(ScreenManager* manager, UserManager* users, FileManager* files, Account* user)
@@ -9,6 +13,8 @@ MainShellScreen::MainShellScreen(ScreenManager* manager, UserManager* users, Fil
     userManager(users),
     fileManager(files),
     currentUser(user),
+    postManager(&ownedPostManager),
+    socialGraph(&ownedSocialGraph),
     activeTab(ShellTab::Home),
     currentUsername(user != nullptr ? user->getUsername() : ""),
     frameBounds({ 0.0f, 0.0f, 480.0f, 0.0f }),
@@ -29,14 +35,73 @@ MainShellScreen::MainShellScreen(ScreenManager* manager, UserManager* users, Fil
     }
 
     updateLayout();
+    ownedPostManager.load("data");
+    initDefaultTabs();
 }
 
 MainShellScreen::~MainShellScreen() {
+    ownedPostManager.purgeExpired();
+    ownedPostManager.save("data");
     clearDetailStack();
+    flushPendingDeletes();
     for (int i = 0; i < 5; i++) {
         delete tabScreens[i];
         tabScreens[i] = nullptr;
     }
+}
+
+void MainShellScreen::flushPendingDeletes() {
+    for (Screen* s : pendingDeletes) {
+        delete s;
+    }
+    pendingDeletes.clear();
+}
+
+void MainShellScreen::initDefaultTabs() {
+    if (currentUser == nullptr) return;
+    int viewerId = currentUser->getId();
+
+    HomeScreen* home = new HomeScreen(
+        this,
+        postManager,
+        socialGraph,
+        nullptr,
+        currentUser,
+        userManager
+    );
+    setTabScreen(ShellTab::Home, home);
+
+    ExploreScreen* explore = new ExploreScreen(
+        postManager,
+        userManager,
+        socialGraph,
+        currentUser,
+        [this](Post* selected) {
+            if (selected != nullptr) {
+                openPostDetail(selected->getId());
+            }
+        }
+    );
+    setTabScreen(ShellTab::Explore, explore);
+
+    ProfileScreen* ownProfile = new ProfileScreen(
+        viewerId,
+        userManager,
+        postManager,
+        socialGraph,
+        viewerId,
+        [this]() { setActiveTab(ShellTab::Home); },
+        [this](int uid, PeopleListMode mode) { openPeopleList(uid, mode); },
+        [this](int pid) { openPostDetail(pid); },
+        [this]() { pushDetailScreen(new SettingsScreen(contentBounds, currentUsername)); }
+    );
+    setTabScreen(ShellTab::Profile, ownProfile);
+}
+
+void MainShellScreen::setServices(PostManager* posts, SocialGraph* graph) {
+    if (posts != nullptr) postManager = posts;
+    if (graph != nullptr) socialGraph = graph;
+    initDefaultTabs();
 }
 
 void MainShellScreen::setCurrentUser(const std::string& username) {
@@ -47,6 +112,9 @@ void MainShellScreen::setTabScreen(ShellTab tab, Screen* screen) {
     int index = static_cast<int>(tab);
     delete tabScreens[index];
     tabScreens[index] = screen;
+    if (tabScreens[index] != nullptr) {
+        tabScreens[index]->onEnter();
+    }
 }
 
 void MainShellScreen::setTabScreen(int tabIndex, Screen* screen) {
@@ -60,6 +128,11 @@ void MainShellScreen::setActiveTab(ShellTab tab) {
 
     clearDetailStack();
     activeTab = tab;
+
+    Screen* current = tabScreens[static_cast<int>(activeTab)];
+    if (current != nullptr) {
+        current->onEnter();
+    }
 
     const char* tabNames[5] = { "Home", "Explore", "New Post", "Notifications", "Profile" };
     Logger::log("Tab switched to " + std::string(tabNames[static_cast<int>(tab)]));
@@ -75,6 +148,7 @@ void MainShellScreen::pushDetailScreen(Screen* screen) {
     if (detailCount < MAX_DETAIL_SCREENS) {
         detailStack[detailCount] = screen;
         detailCount++;
+        screen->onEnter();
     }
     else {
         delete screen;
@@ -84,8 +158,19 @@ void MainShellScreen::pushDetailScreen(Screen* screen) {
 void MainShellScreen::popDetailScreen() {
     if (detailCount > 0) {
         detailCount--;
-        delete detailStack[detailCount];
-        detailStack[detailCount] = nullptr;
+        if (detailStack[detailCount] != nullptr) {
+            pendingDeletes.push_back(detailStack[detailCount]);
+            detailStack[detailCount] = nullptr;
+        }
+        if (detailCount > 0 && detailStack[detailCount - 1] != nullptr) {
+            detailStack[detailCount - 1]->onEnter();
+        }
+        else {
+            Screen* current = tabScreens[static_cast<int>(activeTab)];
+            if (current != nullptr) {
+                current->onEnter();
+            }
+        }
     }
 }
 
@@ -93,6 +178,46 @@ void MainShellScreen::clearDetailStack() {
     while (detailCount > 0) {
         popDetailScreen();
     }
+}
+
+void MainShellScreen::openPostDetail(int postId) {
+    int viewerId = (currentUser != nullptr) ? currentUser->getId() : -1;
+    pushDetailScreen(new PostDetailScreen(
+        postId,
+        postManager,
+        userManager,
+        viewerId,
+        [this]() { popDetailScreen(); },
+        [this](int authorId) { openProfile(authorId); }
+    ));
+}
+
+void MainShellScreen::openProfile(int userId) {
+    int viewerId = (currentUser != nullptr) ? currentUser->getId() : -1;
+    pushDetailScreen(new ProfileScreen(
+        userId,
+        userManager,
+        postManager,
+        socialGraph,
+        viewerId,
+        [this]() { popDetailScreen(); },
+        [this](int uid, PeopleListMode mode) { openPeopleList(uid, mode); },
+        [this](int pid) { openPostDetail(pid); },
+        [this]() { pushDetailScreen(new SettingsScreen(contentBounds, currentUsername)); }
+    ));
+}
+
+void MainShellScreen::openPeopleList(int userId, PeopleListMode mode) {
+    int viewerId = (currentUser != nullptr) ? currentUser->getId() : -1;
+    pushDetailScreen(new PeopleListScreen(
+        userId,
+        mode,
+        userManager,
+        socialGraph,
+        viewerId,
+        [this]() { popDetailScreen(); },
+        [this](int selectedUserId) { openProfile(selectedUserId); }
+    ));
 }
 
 Rectangle MainShellScreen::getContentBounds() const {
@@ -132,21 +257,20 @@ void MainShellScreen::updateLayout() {
 
 void MainShellScreen::update() {
     updateLayout();
+    if (postManager != nullptr) {
+        postManager->purgeExpired();
+    }
     toast.update();
 
     if (modal.isOpen()) {
         modal.update();
+        flushPendingDeletes();
         return;
     }
 
-    if (detailCount > 0 && IsKeyPressed(KEY_ESCAPE)) {
-        popDetailScreen();
-        return;
-    }
-
-    // Press S to open SettingsScreen anytime
     if (detailCount == 0 && IsKeyPressed(KEY_S)) {
         pushDetailScreen(new SettingsScreen(contentBounds, currentUsername));
+        flushPendingDeletes();
         return;
     }
 
@@ -165,7 +289,6 @@ void MainShellScreen::update() {
         for (int i = 0; i < 5; i++) {
             if (CheckCollisionPointRec(mouse, tabBtnBounds[i])) {
                 setActiveTab(static_cast<ShellTab>(i));
-                // Open Settings directly from Profile tab until ProfileScreen is built
                 if (i == 4 && tabScreens[4] == nullptr) {
                     pushDetailScreen(new SettingsScreen(contentBounds, currentUsername));
                 }
@@ -177,15 +300,18 @@ void MainShellScreen::update() {
     if (detailCount > 0) {
         detailStack[detailCount - 1]->update();
 
-        SettingsScreen* settings = dynamic_cast<SettingsScreen*>(detailStack[detailCount - 1]);
-        if (settings != nullptr) {
-            if (settings->isBackRequested()) {
-                popDetailScreen();
-                return;
-            }
-            if (settings->isLogoutRequested() && screenManager != nullptr) {
-                screenManager->setScreen(new LoginScreen(screenManager, userManager, fileManager, GetScreenWidth(), GetScreenHeight()));
-                return;
+        if (detailCount > 0 && detailStack[detailCount - 1] != nullptr) {
+            SettingsScreen* settings = dynamic_cast<SettingsScreen*>(detailStack[detailCount - 1]);
+            if (settings != nullptr) {
+                if (settings->isBackRequested()) {
+                    popDetailScreen();
+                    flushPendingDeletes();
+                    return;
+                }
+                if (settings->isLogoutRequested() && screenManager != nullptr) {
+                    screenManager->setScreen(new LoginScreen(screenManager, userManager, fileManager, GetScreenWidth(), GetScreenHeight()));
+                    return;
+                }
             }
         }
     }
@@ -195,6 +321,8 @@ void MainShellScreen::update() {
             current->update();
         }
     }
+
+    flushPendingDeletes();
 }
 
 void MainShellScreen::drawTopBar() const {
